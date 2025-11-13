@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Feliz Cumpleaños Ñaña!</title>
+    <style>
+        body {
+            background-color: #FFD1DC; /* Rosa pastel */
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        
+        .container {
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        /* Estilo de la carta cerrada */
+        .closed-card {
+            width: 300px;
+            height: 200px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+            transition: transform 0.3s;
+        }
+        
+        .closed-card:hover {
+            transform: scale(1.05);
+        }
+        
+        .closed-card::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 30px;
+            background-color: #FFB6C1;
+            border-radius: 5px 5px 0 0;
+        }
+        
+        .closed-card p {
+            font-size: 24px;
+            color: #FF6B8B;
+            font-weight: bold;
+        }
+        
+        /* Estilo de la carta abierta */
+        .open-card {
+            width: 400px;
+            min-height: 500px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            box-sizing: border-box;
+            position: relative;
+            display: none;
+            z-index: 3;
+            text-align: center;
+        }
+        
+        .message {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        h1 {
+            color: #FF6B8B;
+            margin-bottom: 20px;
+        }
+        
+        /* Estilo del pastel */
+        .cake {
+            font-size: 60px;
+            margin-top: 20px;
+        }
+        
+        /* Botón de cerrar */
+        .close-btn {
+            background-color: #FF6B8B;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        .close-btn:hover {
+            background-color: #FF4B7B;
+        }
+        
+        /* Corazones decorativos */
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+            z-index: 1;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FF6B8B'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+        
+        /* Confeti */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+            z-index: 1;
+        }
+        
+        @keyframes fall {
+            0% {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(5deg);
+            }
+        }
+        
+        .floating-heart {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            opacity: 0.8;
+            z-index: 4;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FF6B8B'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+            animation: float 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Carta cerrada -->
+        <div class="closed-card" id="closedCard">
+            <p>¡Toca para abrir!</p>
+        </div>
+        
+        <!-- Carta abierta -->
+        <div class="open-card" id="openCard">
+            <h1>Feliz Cumpleaños 🎉🎁</h1>
+            <div class="message">
+                <p>Susuu Feliz Cumpleañooos espero tengas un lindo día!</p>
+                <p>No olvides que todo lo que te propongas eres capaz de lograrlo. Eres una persona fuerte, carismática y llena de alegría. Por eso mismo, gracias por apoyarme y ayudarme a ser una mejor persona.</p>
+                <p>Te mereces todo lo mejor. Te quiero y te deseo un feliz cumpleaños.</p>
+            </div>
+            
+            <!-- Pastel -->
+            <div class="cake">🎂</div>
+            
+            <!-- Botón para cerrar la carta -->
+            <button class="close-btn" id="closeBtn">Cerrar carta</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const closedCard = document.getElementById('closedCard');
+            const openCard = document.getElementById('openCard');
+            const closeBtn = document.getElementById('closeBtn');
+            
+            // Variables para almacenar los elementos creados
+            let confettiElements = [];
+            let heartElements = [];
+            let floatingHeartElements = [];
+            
+            closedCard.addEventListener('click', function() {
+                openCardFunction();
+            });
+            
+            closeBtn.addEventListener('click', function() {
+                closeCardFunction();
+            });
+            
+            function openCardFunction() {
+                // Ocultar la carta cerrada
+                closedCard.style.display = 'none';
+                
+                // Mostrar la carta abierta
+                openCard.style.display = 'block';
+                
+                // Crear confeti
+                createConfetti();
+                
+                // Crear corazones decorativos
+                createHearts();
+            }
+            
+            function closeCardFunction() {
+                // Ocultar la carta abierta
+                openCard.style.display = 'none';
+                
+                // Mostrar la carta cerrada
+                closedCard.style.display = 'flex';
+                
+                // Limpiar todos los elementos decorativos
+                clearAllDecorations();
+            }
+            
+            function createConfetti() {
+                const colors = ['#FFB6C1', '#ADD8E6', '#98FB98', '#FDFD96', '#E6E6FA', '#FFD700'];
+                const container = document.querySelector('.container');
+                
+                for (let i = 0; i < 150; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    
+                    // Estilo aleatorio para cada confeti
+                    const size = Math.random() * 10 + 5;
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    
+                    confetti.style.width = `${size}px`;
+                    confetti.style.height = `${size}px`;
+                    confetti.style.backgroundColor = color;
+                    confetti.style.left = `${Math.random() * 100}%`;
+                    confetti.style.animation = `fall ${(Math.random() * 5) + 3}s linear forwards`;
+                    confetti.style.animationDelay = `${Math.random() * 2}s`;
+                    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                    
+                    container.appendChild(confetti);
+                    confettiElements.push(confetti);
+                }
+            }
+            
+            function createHearts() {
+                const container = document.querySelector('.container');
+                
+                // Crear corazones flotantes
+                for (let i = 0; i < 15; i++) {
+                    const heart = document.createElement('div');
+                    heart.className = 'floating-heart';
+                    
+                    heart.style.left = `${Math.random() * 100}%`;
+                    heart.style.top = `${Math.random() * 100}%`;
+                    heart.style.animationDelay = `${Math.random() * 2}s`;
+                    heart.style.transform = `scale(${Math.random() * 0.5 + 0.5})`;
+                    
+                    container.appendChild(heart);
+                    floatingHeartElements.push(heart);
+                }
+                
+                // Crear corazones estáticos alrededor de la carta
+                for (let i = 0; i < 10; i++) {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    
+                    heart.style.left = `${Math.random() * 100}%`;
+                    heart.style.top = `${Math.random() * 100}%`;
+                    heart.style.transform = `scale(${Math.random() * 0.5 + 0.5})`;
+                    
+                    container.appendChild(heart);
+                    heartElements.push(heart);
+                }
+            }
+            
+            function clearAllDecorations() {
+                // Eliminar todos los elementos de confeti
+                confettiElements.forEach(confetti => {
+                    if (confetti.parentNode) {
+                        confetti.parentNode.removeChild(confetti);
+                    }
+                });
+                confettiElements = [];
+                
+                // Eliminar todos los corazones flotantes
+                floatingHeartElements.forEach(heart => {
+                    if (heart.parentNode) {
+                        heart.parentNode.removeChild(heart);
+                    }
+                });
+                floatingHeartElements = [];
+                
+                // Eliminar todos los corazones estáticos
+                heartElements.forEach(heart => {
+                    if (heart.parentNode) {
+                        heart.parentNode.removeChild(heart);
+                    }
+                });
+                heartElements = [];
+            }
+        });
+    </script>
+</body>
+</html>
